@@ -100,4 +100,4 @@ Referral program (post-launch; spec exists) · Derby Day streamer bracket · bra
 
 ## Links
 
-GitHub repo (all implementation) · Gabe's full marketing plan (reference: rates, benchmarks, playbooks, research) · Game doc (source of truth on the game) · One-pager (positioning).
+[GitHub repo](https://github.com/cartridge-gg/dangoderby) (all implementation) · Gabe's full marketing plan (reference: rates, benchmarks, playbooks, research) · [Game doc](https://github.com/cartridge-gg/dangoderby/blob/main/docs/CONTEXT.md) (source of truth on the game) · One-pager (positioning).
