@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dango Derby — Marketing Launch Tracker</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --panel:#ffffff; --ink:#20242b; --muted:#6b7280;
+    --line:#e7e2d6; --turf:#2f9e56; --turf-deep:#1f7d43; --turf-soft:#e4f4ea;
+    --dango:#f2a8c0; --gold:#e3a72f; --shadow:0 1px 2px rgba(0,0,0,.05),0 8px 24px rgba(0,0,0,.06);
+    --radius:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14171c; --panel:#1c2027; --ink:#e9ecf1; --muted:#9aa3af;
+      --line:#2b313a; --turf:#3fb96a; --turf-deep:#2f9e56; --turf-soft:#18261d;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; padding:0 0 64px;
+  }
+  a{color:var(--turf-deep)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  code{background:var(--turf-soft);padding:1px 5px;border-radius:5px;font-size:.85em}
+
+  /* Header */
+  header{position:relative;overflow:hidden;background:radial-gradient(120% 140% at 12% 0%,var(--turf) 0%,var(--turf-deep) 60%,#155e33 100%);color:#fff;padding:34px 0 30px;margin-bottom:24px}
+  header::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 90% at 8% 55%,rgba(227,167,47,.28),transparent 60%);pointer-events:none}
+  header .wrap{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:18px}
+  .mascot{flex:none;width:78px;height:78px;filter:drop-shadow(0 6px 16px rgba(0,0,0,.25))}
+  h1{margin:0;font-size:26px;letter-spacing:-.4px}
+  .sub{opacity:.9;margin-top:6px;font-size:14px;max-width:560px}
+  .badge{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);
+    padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;margin-bottom:10px}
+  .hstat{display:flex;gap:28px;align-items:center}
+  .ring{position:relative;width:104px;height:104px;flex:none}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .pct b{font-size:24px;line-height:1}
+  .ring .pct span{font-size:10px;text-transform:uppercase;letter-spacing:.5px;opacity:.85;margin-top:3px}
+  .count{text-align:center}
+  .count b{font-size:34px;display:block;line-height:1;font-variant-numeric:tabular-nums}
+  .count span{font-size:11px;text-transform:uppercase;letter-spacing:.5px;opacity:.85}
+
+  /* Rules */
+  .rules{margin-bottom:26px}
+  .section-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin:0 0 12px}
+  .laws{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .law{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow)}
+  .law .n{font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.5px}
+  .law p{margin:4px 0 0;font-size:13.5px}
+
+  /* Pillars */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .pillar{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 8px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .pillar h3{margin:0;font-size:16px;display:flex;align-items:baseline;gap:9px}
+  .pillar h3 .num{flex:none;width:26px;height:26px;border-radius:8px;background:var(--turf-soft);color:var(--turf-deep);
+    display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+  .pillar h3 .nm{font-weight:700}
+  .pillar h3 .nm small{display:block;font-weight:400;color:var(--muted);font-size:12px;margin-top:2px}
+  .bar{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin:13px 0 4px}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--turf),var(--turf-deep));border-radius:999px;transition:width .5s ease}
+  .barlabel{font-size:11.5px;color:var(--muted);margin-bottom:6px;font-variant-numeric:tabular-nums}
+  ul.items{list-style:none;margin:6px 0 8px;padding:0}
+  ul.items li{display:flex;gap:9px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;align-items:flex-start}
+  ul.items li:first-child{border-top:0}
+  .box{flex:none;width:17px;height:17px;border-radius:5px;border:2px solid var(--muted);margin-top:1px;position:relative}
+  .box.on{background:var(--turf);border-color:var(--turf)}
+  .box.on::after{content:"";position:absolute;left:4.5px;top:1px;width:4px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  li.done .txt{color:var(--muted)}
+  .attr{display:inline-block;margin-left:6px;font-size:11px;color:var(--turf-deep);background:var(--turf-soft);padding:1px 7px;border-radius:999px;white-space:nowrap;vertical-align:middle}
+
+  /* Side panels */
+  .cols{display:grid;grid-template-columns:1fr;gap:16px;margin-top:26px}
+  @media(min-width:760px){.cols{grid-template-columns:1fr 1fr}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
+  .panel h2{margin:0 0 4px;font-size:15px}
+  .panel.pos{border-top:4px solid var(--dango)}
+  .panel ul{margin:8px 0 0;padding-left:18px}
+  .panel ul li{margin:6px 0;font-size:13.5px}
+  .warn{color:var(--gold);font-weight:600}
+
+  footer{color:var(--muted);font-size:12px;margin-top:30px;text-align:center;line-height:1.7}
+  .status{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--turf);display:inline-block}
+  .err{max-width:640px;margin:60px auto;background:var(--panel);border:1px solid var(--line);border-left:4px solid #d9534f;border-radius:12px;padding:20px 24px}
+  .skeleton{color:var(--muted);text-align:center;padding:80px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <radialGradient id="ball" cx="38%" cy="32%" r="75%">
+            <stop offset="0%" stop-color="#ffcf6b"/><stop offset="45%" stop-color="#f7a83a"/><stop offset="100%" stop-color="#e8871c"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="50" cy="90" rx="26" ry="5" fill="rgba(0,0,0,.18)"/>
+        <circle cx="50" cy="48" r="40" fill="none" stroke="#ffe08a" stroke-width="3" opacity=".85"/>
+        <circle cx="50" cy="48" r="36" fill="url(#ball)"/>
+        <g fill="#ffb3c9" opacity=".9">
+          <g transform="translate(30,30) scale(.9)"><circle r="2.4"/><circle cx="4" r="2.4"/><circle cx="2" cy="3.5" r="2.4"/><circle cx="-2" cy="3.5" r="2.4"/><circle cx="1" cy="-3" r="2.4"/></g>
+          <g transform="translate(70,58) scale(.8)"><circle r="2.4"/><circle cx="4" r="2.4"/><circle cx="2" cy="3.5" r="2.4"/><circle cx="-2" cy="3.5" r="2.4"/><circle cx="1" cy="-3" r="2.4"/></g>
+        </g>
+        <circle cx="40" cy="45" r="4.6" fill="#20242b"/><circle cx="41.6" cy="43.4" r="1.5" fill="#fff"/>
+        <path d="M58 41 l8 4 -8 4" fill="none" stroke="#20242b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M42 55 q7 9 15 0 z" fill="#c0293b"/>
+        <path d="M42 55 q7 9 15 0" fill="none" stroke="#20242b" stroke-width="2" stroke-linecap="round"/>
+        <ellipse cx="33" cy="55" rx="4" ry="2.6" fill="#ff7a9c" opacity=".75"/>
+        <ellipse cx="64" cy="55" rx="4" ry="2.6" fill="#ff7a9c" opacity=".75"/>
+      </svg>
+      <div>
+        <span class="badge">Marketing Launch Tracker</span>
+        <h1 id="title">Dango Derby</h1>
+        <div class="sub" id="subtitle">Loading the constitution…</div>
+      </div>
+    </div>
+    <div class="hstat">
+      <div class="ring" id="ring" hidden>
+        <svg width="104" height="104" viewBox="0 0 104 104">
+          <circle cx="52" cy="52" r="46" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="10"/>
+          <circle id="ringfill" cx="52" cy="52" r="46" fill="none" stroke="#fff" stroke-width="10"
+                  stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289"/>
+        </svg>
+        <div class="pct"><b id="pctnum">0%</b><span>launch-ready</span></div>
+      </div>
+      <div class="count" id="count" hidden>
+        <b id="days">—</b><span id="dayslabel">days to launch</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" id="app">
+  <div class="skeleton">Fetching <code>constitution.md</code>…</div>
+</div>
+
+<script>
+const MD_URL = "./constitution.md";     // relative → works locally, on Pages, and auto-updates on edit
+const LAUNCH = new Date("2026-09-01T00:00:00");
+const CIRC = 289;                        // 2πr for r=46
+
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const inline = s => esc(s)
+  .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
+  .replace(/`(.+?)`/g,"<code>$1</code>")
+  .replace(/(⚠[^]*?)(?=$)/,'<span class="warn">$1</span>');
+
+function parse(md){
+  const lines = md.split(/\r?\n/);
+  let title="Dango Derby", intro=[], cur=null;
+  const sections=[];
+  for(const raw of lines){
+    const line = raw.trimEnd();
+    let m;
+    if((m=line.match(/^#\s+(.+)/))){ title=m[1].trim(); continue; }
+    if((m=line.match(/^##\s+(.+)/))){
+      const head=m[1].trim();
+      const pm=head.match(/^(\d+)\s*·\s*(.+)$/);
+      if(pm) cur={type:"pillar",num:pm[1],name:pm[2].trim(),items:[]};
+      else if(/^rules$/i.test(head)) cur={type:"rules",name:head,items:[]};
+      else if(/^assumptions$/i.test(head)) cur={type:"assumptions",name:head,items:[],prose:[]};
+      else cur={type:"prose",name:head,prose:[]};
+      sections.push(cur);
+      continue;
+    }
+    if(!line.trim()) continue;
+    if(!cur){ intro.push(line); continue; }
+
+    const cb=line.match(/^-\s*\[([ xX])\]\s*(.+)$/);
+    if(cb && cur.type==="pillar"){
+      let text=cb[2].trim(), who=null, date=null;
+      const a=text.match(/\s—\s*(@[^,\n]+?)(?:,\s*([^\n]*))?$/);
+      if(a){ who=a[1].trim(); date=(a[2]||"").trim(); text=text.slice(0,a.index).trim(); }
+      cur.items.push({checked:/[xX]/.test(cb[1]), text, who, date});
+      continue;
+    }
+    const num=line.match(/^\d+\.\s+(.+)$/);
+    if(num && cur.type==="rules"){ cur.items.push(num[1].trim()); continue; }
+    const bullet=line.match(/^-\s+(.+)$/);
+    if(bullet && cur.type==="assumptions"){ cur.items.push(bullet[1].trim()); continue; }
+    // remaining non-list text = prose for the section
+    (cur.prose||(cur.prose=[])).push(line);
+  }
+  return {title, intro, sections};
+}
+
+function render(data){
+  document.getElementById("title").textContent=data.title;
+  const whatis=(data.intro.find(l=>/what this is/i.test(l))||"").replace(/\*\*/g,"").replace(/^what this is\.?\s*/i,"");
+  document.getElementById("subtitle").textContent = whatis || "The short list of what marketing must have working by launch.";
+
+  const pillars=data.sections.filter(s=>s.type==="pillar");
+  const rules=data.sections.find(s=>s.type==="rules");
+  const assume=data.sections.find(s=>s.type==="assumptions");
+  const positioning=data.sections.find(s=>s.type==="prose" && /positioning/i.test(s.name));
+  const notdoing=data.sections.find(s=>s.type==="prose" && /not doing/i.test(s.name));
+  const links=data.sections.find(s=>s.type==="prose" && /^links/i.test(s.name));
+
+  // overall progress
+  const all=pillars.flatMap(p=>p.items);
+  const done=all.filter(i=>i.checked).length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  const ring=document.getElementById("ring"), count=document.getElementById("count");
+  ring.hidden=false; count.hidden=false;
+  document.getElementById("pctnum").textContent=pct+"%";
+  requestAnimationFrame(()=>{document.getElementById("ringfill").style.strokeDashoffset=CIRC-CIRC*pct/100;});
+
+  // countdown
+  const days=Math.ceil((LAUNCH-new Date())/86400000);
+  document.getElementById("days").textContent = days>0?days:"🚀";
+  document.getElementById("dayslabel").textContent = days>0?"days to launch (~Sep 1)":"launched";
+
+  const app=document.getElementById("app");
+  let h="";
+
+  if(rules){
+    h+=`<section class="rules"><p class="section-label">The Rules · never break, never “done”</p><div class="laws">`;
+    rules.items.forEach((r,i)=>{ h+=`<div class="law"><div class="n">RULE ${i+1}</div><p>${inline(r)}</p></div>`; });
+    h+=`</div></section>`;
+  }
+
+  h+=`<p class="section-label">The 8 Pillars · ${done}/${all.length} items done</p><div class="grid">`;
+  pillars.forEach(p=>{
+    const d=p.items.filter(i=>i.checked).length, t=p.items.length, pp=t?Math.round(d/t*100):0;
+    const [nm,sub]=p.name.split(/\s+—\s+/);
+    h+=`<div class="pillar"><h3><span class="num">${p.num}</span><span class="nm">${esc(nm)}${sub?`<small>${esc(sub)}</small>`:""}</span></h3>`;
+    h+=`<div class="bar"><i style="width:${pp}%"></i></div><div class="barlabel">${d} of ${t} · ${pp}%</div><ul class="items">`;
+    p.items.forEach(it=>{
+      const attr = it.who?`<span class="attr">${esc(it.who)}${it.date?" · "+esc(it.date):""}</span>`:"";
+      h+=`<li class="${it.checked?"done":""}"><span class="box ${it.checked?"on":""}"></span><span class="txt">${inline(it.text)}${attr}</span></li>`;
+    });
+    h+=`</ul></div>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="cols">`;
+  if(positioning) h+=`<div class="panel pos"><h2>🎯 Positioning</h2><p>${inline((positioning.prose||[]).join(" "))}</p></div>`;
+  if(assume){
+    h+=`<div class="panel"><h2>⚙️ Assumptions</h2>`;
+    if(assume.prose&&assume.prose.length) h+=`<p style="color:var(--muted);font-size:13px">${inline(assume.prose.join(" "))}</p>`;
+    h+=`<ul>`; assume.items.forEach(a=>h+=`<li>${inline(a)}</li>`); h+=`</ul></div>`;
+  }
+  h+=`</div>`;
+
+  h+=`<footer>`;
+  if(notdoing) h+=`<div><strong>Not doing for launch:</strong> ${inline((notdoing.prose||[]).join(" "))}</div>`;
+  if(links) h+=`<div style="margin-top:8px"><strong>Links:</strong> ${inline((links.prose||[]).join(" "))}</div>`;
+  h+=`<div style="margin-top:14px"><span class="status"><span class="dot"></span> Live from <code>constitution.md</code> · loaded ${new Date().toLocaleString()}</span></div></footer>`;
+
+  app.innerHTML=h;
+}
+
+fetch(MD_URL,{cache:"no-store"})
+  .then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
+  .then(md=>render(parse(md)))
+  .catch(e=>{
+    document.getElementById("app").innerHTML=
+      `<div class="err"><h2 style="margin-top:0">Couldn’t load <code>constitution.md</code></h2>
+       <p>${esc(e.message)}</p>
+       <p style="color:var(--muted);font-size:13px">If you opened this file directly (<code>file://</code>), browsers block the fetch.
+       Serve it over HTTP — e.g. <code>python3 -m http.server</code> in this folder — or view it on GitHub Pages.</p></div>`;
+  });
+</script>
+</body>
+</html>
